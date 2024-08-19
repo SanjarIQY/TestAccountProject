@@ -1,35 +1,58 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using TestAccountProject.Models;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace TestAccountProject.Controllers
 {
     public class HomeController : Controller
     {
-        private static List<Transaction> _transactions = new List<Transaction>();
+        private readonly AppDbContext _context;
 
-        [HttpGet]
-        public IActionResult Index()
+        public HomeController(AppDbContext context)
         {
-            // Pass the list of transactions to the view
-            ViewBag.Transactions = _transactions;
+            _context = context;
+        }
+
+        // GET: /Home/Index
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            // Retrieve all transactions from the database
+            var transactions = await _context.Transactions.ToListAsync();
+            ViewBag.Transactions = transactions;
             return View();
         }
 
+        // POST: /Home/Index
         [HttpPost]
-        public IActionResult Index(Transaction transaction)
+        public async Task<IActionResult> Index(Transaction transaction)
         {
-            // Add the new transaction to the list
-            _transactions.Add(transaction);
+            if (ModelState.IsValid)
+            {
+                // Add the new transaction to the database
+                _context.Transactions.Add(transaction);
+                await _context.SaveChangesAsync();
 
-            // Pass the updated list to the view
-            ViewBag.Transactions = _transactions;
+                // Redirect to the GET Index method to display the updated list
+                return RedirectToAction(nameof(Index));
+            }
+
+            // If there are validation errors, return the view with current transactions
+            var transactions = await _context.Transactions.ToListAsync();
+            ViewBag.Transactions = transactions;
             return View();
         }
 
         public IActionResult About()
         {
             return View();
+        }
+
+        public string Privacy()
+        {
+            return "The page is not completed yet";
         }
     }
 }
