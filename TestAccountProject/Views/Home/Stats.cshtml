@@ -1,0 +1,67 @@
+﻿@model StatsViewModel
+
+<div class="container mt-5">
+    <h1>Получить данные</h1>
+    <form method="post">
+        <!-- Type Selection -->
+        <div class="form-group">
+            <label for="type">Тип:</label>
+            <select asp-for="@Model.FilterClass.Type" class="form-control" id="type" name="type" required>
+                <option value="">Выберите тип</option>
+                <option value="Income">Доход</option>
+                <option value="Expense">Расход</option>
+            </select>
+        </div>
+
+        <!-- Category Selection -->
+        <div class="form-group">
+            <label for="category">Категория:</label>
+            <select  class="form-control" id="category" name="category" required>
+                <option value="">Выберите категорию</option>
+                <option value="All">Все</option>
+                <option value="Salary">Зарплата</option>
+                <option value="Rent">Аренда</option>
+                <option value="Food">Еда</option>
+                <option value="Entertainment">Развлечения</option>
+                <!-- Add more categories as needed -->
+            </select>
+        </div>
+
+        <!-- Month Selection -->
+        <div class="form-group">
+            <label for="month">Месяц:</label>
+            <select asp-for="@Model.FilterClass.Month" class="form-control" id="month" name="month" required>
+                <option value="">Выберите месяц</option>
+                <option value="January">Январь </option>
+                <option value="February">Февраль</option>
+                <option value="March">Март</option>
+                <option value="April">Апрель</option>
+                <option value="May">Май</option>
+                <option value="June">Июнь</option>
+                <option value="July">Июль</option>
+                <option value="August">Август</option>
+                <option value="September">Сентябрь</option>
+                <option value="October">Октябрь</option>
+                <option value="November">Ноябрь</option>
+                <option value="December">Декабрь</option>
+            </select>
+        </div>
+
+        @if(Model.Statistic is not null)
+        {
+            @foreach(var transaction in Model.Statistic.Transactions)
+            {
+                <h1>@transaction.Amount @transaction.Date @transaction.Type</h1>
+            }
+
+            <h1>Income: @Model.Statistic.Income</h1>
+            <h1>Outcame: @Model.Statistic.Outcome</h1>
+        }
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Получить данные</button>
+
+
+    </form>
+</div>
+

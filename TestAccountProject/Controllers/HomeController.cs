@@ -8,51 +8,53 @@ namespace TestAccountProject.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly AppDbContext _context;
-
+        AppDbContext db;
         public HomeController(AppDbContext context)
         {
-            _context = context;
+            db = context;
         }
 
-        // GET: /Home/Index
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            // Retrieve all transactions from the database
-            var transactions = await _context.Transactions.ToListAsync();
-            ViewBag.Transactions = transactions;
-            return View();
+            return View(await db.Transaction.ToListAsync());
         }
-
-        // POST: /Home/Index
         [HttpPost]
         public async Task<IActionResult> Index(Transaction transaction)
         {
-            if (ModelState.IsValid)
+            db.Transaction.Add(transaction);
+            if (transaction.Date.Kind == DateTimeKind.Unspecified)
             {
-                // Add the new transaction to the database
-                _context.Transactions.Add(transaction);
-                await _context.SaveChangesAsync();
-
-                // Redirect to the GET Index method to display the updated list
-                return RedirectToAction(nameof(Index));
+                transaction.Date = DateTime.SpecifyKind(transaction.Date, DateTimeKind.Utc);
+            }
+            else if (transaction.Date.Kind == DateTimeKind.Local)
+            {
+                transaction.Date = transaction.Date.ToUniversalTime();
             }
 
-            // If there are validation errors, return the view with current transactions
-            var transactions = await _context.Transactions.ToListAsync();
-            ViewBag.Transactions = transactions;
-            return View();
+            await db.SaveChangesAsync();
+            return View(await db.Transaction.ToListAsync());
         }
 
-        public IActionResult About()
+        [HttpGet]
+        public async Task<IActionResult> Stats()
         {
-            return View();
+            return View(new StatsViewModel()
+            {
+                Statistic = new Statistic() { Income = 10, Outcome = 20, Transactions = db.Transaction.ToList() },
+            });
         }
 
-        public string Privacy()
+        [HttpPost]
+        public async Task<IActionResult> Stats(FilterClass req)
         {
-            return "The page is not completed yet";
+            ///statsitika
+            return View(new StatsViewModel()
+            {
+                Statistic = new Statistic() { Income = 10, Outcome = 20, Transactions = db.Transaction.ToList() },
+                FilterClass = req,
+            });
         }
+
     }
 }

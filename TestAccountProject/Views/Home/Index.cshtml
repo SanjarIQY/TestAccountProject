@@ -2,6 +2,8 @@
     ViewData["Title"] = "Ввод транзакции";
 }
 
+@model IEnumerable<TestAccountProject.Models.Transaction>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -73,11 +75,18 @@
 
         <h2>Список транзакций</h2>
         <ul>
-            @foreach (var transaction in ViewBag.Transactions)
+            @foreach (var transaction in Model)
             {
                 <li>
                     Дата: @transaction.Date, Тип: @transaction.Type,
-                    Категория: @(transaction.Type == TestAccountProject.Models.Type.Income ? transaction.IncomeCategory.ToString() : transaction.ExpenseCategory.ToString()),
+                    Категория: @if ((int)transaction.Type == 1)
+                    {
+                        <span>@transaction.IncomeCategory</span>
+                    }
+                    else
+                    {
+                        <span>@transaction.ExpenseCategory</span>
+                    }
                     Сумма: @transaction.Amount, Комментарий: @transaction.Comment
                 </li>
             }

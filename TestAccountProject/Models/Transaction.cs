@@ -5,25 +5,25 @@ namespace TestAccountProject.Models
 {
     public enum Type 
     {
-        Income,
-        Expense
+        Income = 1,
+        Expense = 2
     }
 
     public enum IncomeCategory
     {
-        RentaIncome,
-        Salary,
-        OtherIncome
+        RentaIncome = 1,
+        Salary = 2,
+        OtherIncome = 3
     }
 
     public enum ExpenseCategory
     {
-        Food,
-        Transport,
-        MobileNetwork,
-        Internet,
-        Entertainment,
-        Other
+        Food = 1,
+        Transport = 2,
+        MobileNetwork = 3,
+        Internet = 4,
+        Entertainment = 5,
+        Other = 6
     }
 
     [Table("transaction")]
@@ -36,9 +36,9 @@ namespace TestAccountProject.Models
         [Column("type")]
         public Type Type { get; set; }
         [Column("expense_category")]
-        public IncomeCategory ExpenseCategory { get; set; }
+        public IncomeCategory? IncomeCategory { get; set; }
         [Column("income_category")]
-        public ExpenseCategory IncomeCategory { get; set; }
+        public ExpenseCategory? ExpenseCategory { get; set; }
         [Column("amount")]
         public decimal Amount { get; set; }
         [Column("comment")]

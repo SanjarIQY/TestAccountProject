@@ -8,7 +8,7 @@ using TestAccountProject.Models;
 
 #nullable disable
 
-namespace TestAccountProject.Data.Migrations
+namespace TestAccountProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -46,11 +46,11 @@ namespace TestAccountProject.Data.Migrations
 
                     b.Property<int>("ExpenseCategory")
                         .HasColumnType("integer")
-                        .HasColumnName("expense_category");
+                        .HasColumnName("income_category");
 
                     b.Property<int>("IncomeCategory")
                         .HasColumnType("integer")
-                        .HasColumnName("income_category");
+                        .HasColumnName("expense_category");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer")

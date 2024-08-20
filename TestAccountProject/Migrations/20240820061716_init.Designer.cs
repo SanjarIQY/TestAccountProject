@@ -9,11 +9,11 @@ using TestAccountProject.Models;
 
 #nullable disable
 
-namespace TestAccountProject.Data.Migrations
+namespace TestAccountProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240819091003_Init")]
-    partial class Init
+    [Migration("20240820061716_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,11 +49,11 @@ namespace TestAccountProject.Data.Migrations
 
                     b.Property<int>("ExpenseCategory")
                         .HasColumnType("integer")
-                        .HasColumnName("expense_category");
+                        .HasColumnName("income_category");
 
                     b.Property<int>("IncomeCategory")
                         .HasColumnType("integer")
-                        .HasColumnName("income_category");
+                        .HasColumnName("expense_category");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer")
