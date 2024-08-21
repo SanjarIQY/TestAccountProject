@@ -23,14 +23,7 @@ namespace TestAccountProject.Controllers
         public async Task<IActionResult> Index(Transaction transaction)
         {
             db.Transaction.Add(transaction);
-            if (transaction.Date.Kind == DateTimeKind.Unspecified)
-            {
-                transaction.Date = DateTime.SpecifyKind(transaction.Date, DateTimeKind.Utc);
-            }
-            else if (transaction.Date.Kind == DateTimeKind.Local)
-            {
-                transaction.Date = transaction.Date.ToUniversalTime();
-            }
+            transaction.Date = TimeFixer(transaction.Date);
 
             await db.SaveChangesAsync();
             return View(await db.Transaction.ToListAsync());
@@ -41,19 +34,49 @@ namespace TestAccountProject.Controllers
         {
             return View(new StatsViewModel()
             {
-                Statistic = new Statistic() { Income = 10, Outcome = 20, Transactions = db.Transaction.ToList() },
+                Statistic = new Statistic() { Transactions = null },
             });
         }
 
         [HttpPost]
         public async Task<IActionResult> Stats(FilterClass req)
         {
-            ///statsitika
+            req.StartDate = TimeFixer(req.StartDate);
+            req.EndDate = TimeFixer(req.EndDate);
+
+            List<Transaction>? stats = null;
+
+            if (db.Transaction.Count() != 0)
+            {
+                if ((int)req.IncomeCategory == 4 || (int)req.ExpenseCategory == 7)
+                {
+                    stats = await db.Transaction.AsQueryable().Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type).ToListAsync();
+                }
+                else
+                {
+                    stats = await db.Transaction.AsQueryable().Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type && ((int)req.Type == 1 ? req.IncomeCategory == d.IncomeCategory : req.ExpenseCategory == d.ExpenseCategory)).ToListAsync();
+                }
+            }
+
             return View(new StatsViewModel()
             {
-                Statistic = new Statistic() { Income = 10, Outcome = 20, Transactions = db.Transaction.ToList() },
+                Statistic = new Statistic() { Income = 10, Outcome = 20, Transactions = stats },
                 FilterClass = req,
             });
+        }
+
+        public DateTime TimeFixer(DateTime date)
+        {
+            if (date.Date.Kind == DateTimeKind.Unspecified)
+            {
+                date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+            }
+            else if (date.Kind == DateTimeKind.Local)
+            {
+                date = date.ToUniversalTime();
+            }
+
+            return date;
         }
 
     }

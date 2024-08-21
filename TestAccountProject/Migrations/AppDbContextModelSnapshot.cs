@@ -46,11 +46,11 @@ namespace TestAccountProject.Migrations
 
                     b.Property<int>("ExpenseCategory")
                         .HasColumnType("integer")
-                        .HasColumnName("income_category");
+                        .HasColumnName("expense_category");
 
                     b.Property<int>("IncomeCategory")
                         .HasColumnType("integer")
-                        .HasColumnName("expense_category");
+                        .HasColumnName("income_category");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer")

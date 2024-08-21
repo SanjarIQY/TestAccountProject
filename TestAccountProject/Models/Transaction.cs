@@ -11,9 +11,10 @@ namespace TestAccountProject.Models
 
     public enum IncomeCategory
     {
-        RentaIncome = 1,
+        RentalIncome = 1,
         Salary = 2,
-        OtherIncome = 3
+        OtherIncome = 3,
+        All = 4
     }
 
     public enum ExpenseCategory
@@ -23,7 +24,8 @@ namespace TestAccountProject.Models
         MobileNetwork = 3,
         Internet = 4,
         Entertainment = 5,
-        Other = 6
+        Other = 6,
+        All = 7
     }
 
     [Table("transaction")]
@@ -35,10 +37,10 @@ namespace TestAccountProject.Models
         public DateTime Date { get; set; }
         [Column("type")]
         public Type Type { get; set; }
-        [Column("expense_category")]
-        public IncomeCategory? IncomeCategory { get; set; }
         [Column("income_category")]
-        public ExpenseCategory? ExpenseCategory { get; set; }
+        public IncomeCategory IncomeCategory { get; set; }
+        [Column("expense_category")]
+        public ExpenseCategory ExpenseCategory { get; set; }
         [Column("amount")]
         public decimal Amount { get; set; }
         [Column("comment")]

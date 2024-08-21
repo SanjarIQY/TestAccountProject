@@ -20,8 +20,8 @@ namespace TestAccountProject.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     type = table.Column<int>(type: "integer", nullable: false),
-                    expense_category = table.Column<int>(type: "integer", nullable: false),
                     income_category = table.Column<int>(type: "integer", nullable: false),
+                    expense_category = table.Column<int>(type: "integer", nullable: false),
                     amount = table.Column<decimal>(type: "numeric", nullable: false),
                     comment = table.Column<string>(type: "text", nullable: false)
                 },

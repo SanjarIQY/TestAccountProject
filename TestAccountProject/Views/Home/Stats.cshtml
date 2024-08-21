@@ -1,67 +1,91 @@
 ﻿@model StatsViewModel
 
-<div class="container mt-5">
-    <h1>Получить данные</h1>
-    <form method="post">
-        <!-- Type Selection -->
-        <div class="form-group">
-            <label for="type">Тип:</label>
-            <select asp-for="@Model.FilterClass.Type" class="form-control" id="type" name="type" required>
-                <option value="">Выберите тип</option>
-                <option value="Income">Доход</option>
-                <option value="Expense">Расход</option>
-            </select>
-        </div>
+<body>
+    <div class="container mt-5">
+        <h1>Ввод данных</h1>
+        <form method="post">
+            <div class="date-group">
+                <div class="form-group">
+                    <label for="startDate">Дата начала</label>
+                    <input type="date" asp-for="@Model.FilterClass.StartDate" class="form-control" id="startDate" name="StartDate" required>
+                </div>
 
-        <!-- Category Selection -->
-        <div class="form-group">
-            <label for="category">Категория:</label>
-            <select  class="form-control" id="category" name="category" required>
-                <option value="">Выберите категорию</option>
-                <option value="All">Все</option>
-                <option value="Salary">Зарплата</option>
-                <option value="Rent">Аренда</option>
-                <option value="Food">Еда</option>
-                <option value="Entertainment">Развлечения</option>
-                <!-- Add more categories as needed -->
-            </select>
-        </div>
+                <div class="form-group">
+                    <label for="endDate">Дата окончания</label>
+                    <input type="date" asp-for="@Model.FilterClass.EndDate" class="form-control" id="endDate" name="EndDate" required>
+                </div>
+            </div>
 
-        <!-- Month Selection -->
-        <div class="form-group">
-            <label for="month">Месяц:</label>
-            <select asp-for="@Model.FilterClass.Month" class="form-control" id="month" name="month" required>
-                <option value="">Выберите месяц</option>
-                <option value="January">Январь </option>
-                <option value="February">Февраль</option>
-                <option value="March">Март</option>
-                <option value="April">Апрель</option>
-                <option value="May">Май</option>
-                <option value="June">Июнь</option>
-                <option value="July">Июль</option>
-                <option value="August">Август</option>
-                <option value="September">Сентябрь</option>
-                <option value="October">Октябрь</option>
-                <option value="November">Ноябрь</option>
-                <option value="December">Декабрь</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="type">Тип</label>
+                <select class="form-control" id="type" name="Type" required>
+                    <option value="">Выберите тип</option>
+                    <option value="Income">Приход</option>
+                    <option value="Expense">Расход</option>
+                </select>
+            </div>
 
-        @if(Model.Statistic is not null)
+            <div class="form-group category-options" id="income-options">
+                <label for="income-category">Категория прихода</label>
+                <select class="form-control" id="income-category" name="IncomeCategory">
+                    <option value="">Выберите категорию прихода</option>
+                    <option value="All">Все</option>
+                    <option value="Salary">Заработная плата</option>
+                    <option value="RentalIncome">Доход от аренды недвижимости</option>
+                    <option value="OtherIncome">Иные доходы</option>
+                </select>
+            </div>
+
+            <div class="form-group category-options" id="expense-options">
+                <label for="expense-category">Категория расхода</label>
+                <select class="form-control" id="expense-category" name="ExpenseCategory">
+                    <option value="">Выберите категорию расхода</option>
+                    <option value="All">Все</option>
+                    <option value="Food">Продукты питания</option>
+                    <option value="Transport">Транспорт</option>
+                    <option value="MobileNetwork">Мобильная связь</option>
+                    <option value="Internet">Интернет</option>
+                    <option value="Entertainment">Развлечения</option>
+                    <option value="Other">Прочее</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+    </div>
+
+    <ul class="list-group mt-4">
+        @if (Model.Statistic?.Transactions != null && Model.Statistic.Transactions.Any())
         {
-            @foreach(var transaction in Model.Statistic.Transactions)
+            foreach (var item in Model.Statistic.Transactions)
             {
-                <h1>@transaction.Amount @transaction.Date @transaction.Type</h1>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>Дата:</strong> @item.Date.ToShortDateString() <br />
+                        <strong>Тип:</strong> @item.Type <br />
+                        <strong>Категория:</strong> @((int)item.Type == 2 ? item.ExpenseCategory : item.IncomeCategory)
+                    </div>
+                    <span class="badge badge-primary badge-pill">
+                        @item.Amount.ToString("C")
+                    </span>
+                </li>
             }
-
-            <h1>Income: @Model.Statistic.Income</h1>
-            <h1>Outcame: @Model.Statistic.Outcome</h1>
         }
+        else
+        {
+            <li class="list-group-item">Транзакции не найдены.</li>
+        }
+    </ul>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary">Получить данные</button>
-
-
-    </form>
-</div>
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('type').addEventListener('change', function () {
+            const type = this.value;
+            document.getElementById('income-options').style.display = (type === 'Income') ? 'block' : 'none';
+            document.getElementById('expense-options').style.display = (type === 'Expense') ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>

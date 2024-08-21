@@ -1,22 +1,5 @@
-﻿@{
-    ViewData["Title"] = "Ввод транзакции";
-}
+﻿@model IEnumerable<TestAccountProject.Models.Transaction>
 
-@model IEnumerable<TestAccountProject.Models.Transaction>
-
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ввод транзакции</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <style>
-        .category-options {
-            display: none;
-        }
-    </style>
-</head>
 <body>
     <div class="container mt-5">
         <h1>Ввод транзакции</h1>
@@ -47,7 +30,7 @@
 
             <div class="form-group category-options" id="expense-options">
                 <label for="expense-category">Категория расхода</label>
-                <select class="form-control" id="expense-category" name="ExpenseCategory">
+                <select  class="form-control" id="expense-category" name="ExpenseCategory">
                     <option value="">Выберите категорию расхода</option>
                     <option value="Food">Продукты питания</option>
                     <option value="Transport">Транспорт</option>
@@ -73,24 +56,6 @@
 
         <hr>
 
-        <h2>Список транзакций</h2>
-        <ul>
-            @foreach (var transaction in Model)
-            {
-                <li>
-                    Дата: @transaction.Date, Тип: @transaction.Type,
-                    Категория: @if ((int)transaction.Type == 1)
-                    {
-                        <span>@transaction.IncomeCategory</span>
-                    }
-                    else
-                    {
-                        <span>@transaction.ExpenseCategory</span>
-                    }
-                    Сумма: @transaction.Amount, Комментарий: @transaction.Comment
-                </li>
-            }
-        </ul>   
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

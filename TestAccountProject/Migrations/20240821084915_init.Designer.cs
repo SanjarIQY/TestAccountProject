@@ -12,7 +12,7 @@ using TestAccountProject.Models;
 namespace TestAccountProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240820061716_init")]
+    [Migration("20240821084915_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -49,11 +49,11 @@ namespace TestAccountProject.Migrations
 
                     b.Property<int>("ExpenseCategory")
                         .HasColumnType("integer")
-                        .HasColumnName("income_category");
+                        .HasColumnName("expense_category");
 
                     b.Property<int>("IncomeCategory")
                         .HasColumnType("integer")
-                        .HasColumnName("expense_category");
+                        .HasColumnName("income_category");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer")
