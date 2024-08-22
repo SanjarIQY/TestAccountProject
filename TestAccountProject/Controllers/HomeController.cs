@@ -60,9 +60,20 @@ namespace TestAccountProject.Controllers
 
             return View(new StatsViewModel()
             {
-                Statistic = new Statistic() { Income = 10, Outcome = 20, Transactions = stats },
+                Statistic = new Statistic() { Summ = Summ(stats), Transactions = stats },
                 FilterClass = req,
             });
+        }
+
+        public decimal Summ(List<Transaction> transactions)
+        {
+            decimal summ = 0;
+            foreach (var item in transactions)
+            {
+                summ += item.Amount;
+            }
+
+            return summ;
         }
 
         public DateTime TimeFixer(DateTime date)
