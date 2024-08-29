@@ -44,11 +44,11 @@ namespace TestAccountProject.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date");
 
-                    b.Property<int>("ExpenseCategory")
+                    b.Property<int?>("ExpenseCategory")
                         .HasColumnType("integer")
                         .HasColumnName("expense_category");
 
-                    b.Property<int>("IncomeCategory")
+                    b.Property<int?>("IncomeCategory")
                         .HasColumnType("integer")
                         .HasColumnName("income_category");
 

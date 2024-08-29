@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestAccountProject.Models
 {
-    public enum Type 
+    public enum Type
     {
         Income = 1,
         Expense = 2
@@ -31,18 +31,25 @@ namespace TestAccountProject.Models
     [Table("transaction")]
     public class Transaction
     {
+        [Key]
         [Column("id")]
         public int Id { get; set; }
+
         [Column("date")]
         public DateTime Date { get; set; }
+
         [Column("type")]
         public Type Type { get; set; }
+
         [Column("income_category")]
-        public IncomeCategory IncomeCategory { get; set; }
+        public IncomeCategory? IncomeCategory { get; set; }
+
         [Column("expense_category")]
-        public ExpenseCategory ExpenseCategory { get; set; }
+        public ExpenseCategory? ExpenseCategory { get; set; }
+
         [Column("amount")]
         public decimal Amount { get; set; }
+
         [Column("comment")]
         public string Comment { get; set; }
     }

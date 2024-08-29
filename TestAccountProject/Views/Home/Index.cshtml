@@ -56,6 +56,30 @@
 
         <hr>
 
+        <ul class="styled-list">
+            @{
+                int i = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <li>
+                    <div class="item-header">
+                        <span class="date-label">Date:</span>
+                        <time datetime="@item.Date.ToString("yyyy-MM-dd")">@item.Date.ToString("MMMM dd, yyyy")</time>
+                    </div>
+                    <div class="item-details">
+                        <span class="amount-label">Amount:</span> <span class="amount-value">@item.Amount.ToString("C")</span><br />
+                        <span class="type-label">Type:</span> <span class="type-value">@item.Type</span><br />
+                        <span class="comment-label">Comment:</span> <span class="comment-value">@item.Comment</span>
+                    </div>
+                </li>
+                <hr class="transaction-divider" />
+                i++;
+            }
+        </ul>
+
+        <span>Всего транзакции: @i </span>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

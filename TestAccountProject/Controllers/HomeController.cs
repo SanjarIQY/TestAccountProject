@@ -17,16 +17,16 @@ namespace TestAccountProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await db.Transaction.ToListAsync());
+            return View(await db.Transactions.ToListAsync());
         }
         [HttpPost]
         public async Task<IActionResult> Index(Transaction transaction)
         {
-            db.Transaction.Add(transaction);
+            db.Transactions.Add(transaction);
             transaction.Date = TimeFixer(transaction.Date);
 
             await db.SaveChangesAsync();
-            return View(await db.Transaction.ToListAsync());
+            return View(await db.Transactions.ToListAsync());
         }
 
         [HttpGet]
@@ -46,15 +46,15 @@ namespace TestAccountProject.Controllers
 
             List<Transaction>? stats = null;
 
-            if (db.Transaction.Count() != 0)
+            if (db.Transactions.Count() != 0)
             {
                 if ((int)req.IncomeCategory == 4 || (int)req.ExpenseCategory == 7)
                 {
-                    stats = await db.Transaction.AsQueryable().Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type).ToListAsync();
+                    stats = await db.Transactions.AsQueryable().Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type).ToListAsync();
                 }
                 else
                 {
-                    stats = await db.Transaction.AsQueryable().Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type && ((int)req.Type == 1 ? req.IncomeCategory == d.IncomeCategory : req.ExpenseCategory == d.ExpenseCategory)).ToListAsync();
+                    stats = await db.Transactions.AsQueryable().Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type && ((int)req.Type == 1 ? req.IncomeCategory == d.IncomeCategory : req.ExpenseCategory == d.ExpenseCategory)).ToListAsync();
                 }
             }
 
@@ -67,6 +67,10 @@ namespace TestAccountProject.Controllers
 
         public decimal Summ(List<Transaction> transactions)
         {
+            if (transactions is null)
+            {
+                return 0;
+            }
             decimal summ = 0;
             foreach (var item in transactions)
             {
