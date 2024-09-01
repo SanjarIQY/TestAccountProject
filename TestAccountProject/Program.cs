@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TestAccountProject.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,12 @@ string connection = builder.Configuration.GetConnectionString("EFDemo");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connection));
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => //CookieAuthenticationOptions
+    {
+        options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+    });
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -28,9 +35,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Register}/{id?}");
 
 app.Run();

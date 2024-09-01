@@ -29,6 +29,20 @@ namespace TestAccountProject.Migrations
                 {
                     table.PrimaryKey("PK_transaction", x => x.id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -36,6 +50,9 @@ namespace TestAccountProject.Migrations
         {
             migrationBuilder.DropTable(
                 name: "transaction");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

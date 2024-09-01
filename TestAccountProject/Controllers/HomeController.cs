@@ -3,6 +3,7 @@ using TestAccountProject.Models;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestAccountProject.Controllers
 {
@@ -14,7 +15,7 @@ namespace TestAccountProject.Controllers
             db = context;
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await db.Transaction.ToListAsync());
@@ -27,6 +28,12 @@ namespace TestAccountProject.Controllers
 
             await db.SaveChangesAsync();
             return View(await db.Transaction.ToListAsync());
+        }*/
+
+        [Authorize]
+        public IActionResult Index()
+        {
+            return Content(User.Identity.Name);
         }
 
         [HttpGet]
@@ -65,8 +72,11 @@ namespace TestAccountProject.Controllers
             });
         }
 
-        public decimal Summ(List<Transaction> transactions)
+        public decimal Summ(List<Transaction>? transactions)
         {
+            if (transactions == null)
+                return 0;
+
             decimal summ = 0;
             foreach (var item in transactions)
             {

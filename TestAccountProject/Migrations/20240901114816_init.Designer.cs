@@ -12,7 +12,7 @@ using TestAccountProject.Models;
 namespace TestAccountProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240821084915_init")]
+    [Migration("20240901114816_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -62,6 +62,27 @@ namespace TestAccountProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("transaction");
+                });
+
+            modelBuilder.Entity("TestAccountProject.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }
