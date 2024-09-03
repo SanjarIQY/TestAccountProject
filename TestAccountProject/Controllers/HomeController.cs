@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TestAccountProject.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         AppDbContext db;
@@ -15,7 +16,7 @@ namespace TestAccountProject.Controllers
             db = context;
         }
 
-        /*[HttpGet]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await db.Transaction.ToListAsync());
@@ -28,12 +29,6 @@ namespace TestAccountProject.Controllers
 
             await db.SaveChangesAsync();
             return View(await db.Transaction.ToListAsync());
-        }*/
-
-        [Authorize]
-        public IActionResult Index()
-        {
-            return Content(User.Identity.Name);
         }
 
         [HttpGet]

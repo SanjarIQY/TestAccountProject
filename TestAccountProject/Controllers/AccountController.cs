@@ -21,9 +21,10 @@ namespace TestAccountProject.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return PartialView();
+            return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel Model)
         {
             if (ModelState.IsValid)
@@ -48,9 +49,10 @@ namespace TestAccountProject.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return PartialView();
+            return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel Model)
         {
             if (ModelState.IsValid)
