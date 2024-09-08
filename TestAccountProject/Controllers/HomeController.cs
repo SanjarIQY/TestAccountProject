@@ -3,7 +3,10 @@ using TestAccountProject.Models;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using TestAccountProject.Models.BuisnessLogic;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+
 
 namespace TestAccountProject.Controllers
 {
@@ -21,6 +24,7 @@ namespace TestAccountProject.Controllers
         {
             return View(await db.Transaction.ToListAsync());
         }
+
         [HttpPost]
         public async Task<IActionResult> Index(Transaction transaction)
         {
@@ -30,6 +34,11 @@ namespace TestAccountProject.Controllers
             await db.SaveChangesAsync();
             return View(await db.Transaction.ToListAsync());
         }
+
+     /*   public IActionResult Index()
+        {
+            return Content(HttpContext.User.Identity.Name);
+        }*/
 
         [HttpGet]
         public async Task<IActionResult> Stats()

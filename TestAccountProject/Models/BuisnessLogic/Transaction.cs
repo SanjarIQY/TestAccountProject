@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TestAccountProject.Models
+namespace TestAccountProject.Models.BuisnessLogic
 {
-    public enum Type 
+    public enum Type
     {
         Income = 1,
         Expense = 2

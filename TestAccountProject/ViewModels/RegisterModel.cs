@@ -4,15 +4,19 @@ namespace TestAccountProject.ViewModels
 {
     public class RegisterModel
     {
-        [Required(ErrorMessage ="Email is not entered")]
+        [Required]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage ="Password is not entered")]
+        [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
+        [Required]
+        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Password is incorrect")]
-        public string ConfirmPassword { get; set; }
+        [Display(Name = "Подтвердить пароль")]
+        public string PasswordConfirm { get; set; }
     }
 }

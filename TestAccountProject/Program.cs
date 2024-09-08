@@ -1,8 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TestAccountProject.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +11,16 @@ string connection = builder.Configuration.GetConnectionString("EFDemo");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connection));
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => //CookieAuthenticationOptions
-    {
-        options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-    });
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 3;
+});
 
 builder.Services.AddControllersWithViews();
 

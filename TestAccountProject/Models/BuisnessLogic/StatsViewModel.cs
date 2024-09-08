@@ -1,4 +1,4 @@
-﻿namespace TestAccountProject.Models
+﻿namespace TestAccountProject.Models.BuisnessLogic
 {
     public class StatsViewModel
     {

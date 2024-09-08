@@ -32,6 +32,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Stats">Статистика</a>
                         </li>
                     </ul>
+                    <!-- Logout button on the right -->
+                    <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                        <button class="btn btn-outline-danger" type="submit">Logout</button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -47,4 +51,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
