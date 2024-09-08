@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TestAccountProject.Models.BuisnessLogic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Immutable;
 
 
 namespace TestAccountProject.Controllers
@@ -13,32 +14,36 @@ namespace TestAccountProject.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        AppDbContext db;
-        public HomeController(AppDbContext context)
+        private readonly AppDbContext db;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signinManager;
+        public HomeController(AppDbContext context, UserManager<IdentityUser> UM, SignInManager<IdentityUser> SM)
         {
             db = context;
+            _userManager = UM;
+            _signinManager = SM;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await db.Transaction.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var transactions = await db.Transaction.Where(x => x.User.Id == user.Id).ToListAsync();
+            return View(transactions);
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(Transaction transaction)
         {
+            var user = await _userManager.GetUserAsync(User);
+            transaction.User = user;
+            transaction.UserId = user.Id;
             db.Transaction.Add(transaction);
             transaction.Date = TimeFixer(transaction.Date);
 
             await db.SaveChangesAsync();
             return View(await db.Transaction.ToListAsync());
         }
-
-     /*   public IActionResult Index()
-        {
-            return Content(HttpContext.User.Identity.Name);
-        }*/
 
         [HttpGet]
         public async Task<IActionResult> Stats()
@@ -52,6 +57,7 @@ namespace TestAccountProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Stats(FilterClass req)
         {
+            var user = await _userManager.GetUserAsync(User);
             req.StartDate = TimeFixer(req.StartDate);
             req.EndDate = TimeFixer(req.EndDate);
 
@@ -61,11 +67,15 @@ namespace TestAccountProject.Controllers
             {
                 if ((int)req.IncomeCategory == 4 || (int)req.ExpenseCategory == 7)
                 {
-                    stats = await db.Transaction.AsQueryable().Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type).ToListAsync();
+                    stats = await db.Transaction.AsQueryable()
+                        .Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type && d.UserId == user.Id)
+                        .ToListAsync();
                 }
                 else
                 {
-                    stats = await db.Transaction.AsQueryable().Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type && ((int)req.Type == 1 ? req.IncomeCategory == d.IncomeCategory : req.ExpenseCategory == d.ExpenseCategory)).ToListAsync();
+                    stats = await db.Transaction.AsQueryable()
+                        .Where(d => d.Date >= req.StartDate && d.Date <= req.EndDate && d.Type == req.Type && ((int)req.Type == 1 ? req.IncomeCategory == d.IncomeCategory : req.ExpenseCategory == d.ExpenseCategory) && d.UserId == user.Id)
+                        .ToListAsync();
                 }
             }
 

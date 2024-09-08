@@ -56,23 +56,26 @@ namespace TestAccountProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user != null)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    var isPasswordCorrect = await _userManager.CheckPasswordAsync(user, model.Password);
+                    if (isPasswordCorrect)
                     {
-                        return Redirect(model.ReturnUrl);
+                        await _signInManager.SignInAsync(user, isPersistent: model.RememberMe);
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        ModelState.AddModelError("", "Invalid password.");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Incorrect login or password");
+                    ModelState.AddModelError("", "User not found.");
                 }
+
             }
             return View(model);
         }

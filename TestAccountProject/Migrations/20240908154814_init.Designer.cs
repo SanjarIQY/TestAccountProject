@@ -12,7 +12,7 @@ using TestAccountProject.Models;
 namespace TestAccountProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240908074255_init")]
+    [Migration("20240908154814_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -255,7 +255,13 @@ namespace TestAccountProject.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("type");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("transaction");
                 });
@@ -309,6 +315,17 @@ namespace TestAccountProject.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TestAccountProject.Models.BuisnessLogic.Transaction", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

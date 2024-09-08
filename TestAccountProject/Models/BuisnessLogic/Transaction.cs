@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace TestAccountProject.Models.BuisnessLogic
 {
@@ -45,5 +46,8 @@ namespace TestAccountProject.Models.BuisnessLogic
         public decimal Amount { get; set; }
         [Column("comment")]
         public string Comment { get; set; }
+
+        public string UserId {get;set;}
+        public IdentityUser User {get; set;}
     }
 }

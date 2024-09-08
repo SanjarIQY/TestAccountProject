@@ -1,4 +1,8 @@
 ﻿@model TestAccountProject.ViewModels.LoginModel
+@{
+    ViewData["Title"] = "LogIn"; 
+    Layout = "_LayoutAccount.cshtml";
+}
 
 <h2>Вход в приложение</h2>
 <form method="post" asp-controller="Account" asp-action="Login"

@@ -1,4 +1,8 @@
 ﻿@model TestAccountProject.ViewModels.RegisterModel
+@{
+    ViewData["Title"] = "Register"; 
+    Layout = "_LayoutAccount.cshtml";
+}
 
 <h2>Регистрация нового пользователя</h2>
 <form method="post" asp-controller="Account" asp-action="Register">
