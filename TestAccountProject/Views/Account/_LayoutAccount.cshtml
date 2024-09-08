@@ -9,42 +9,16 @@
     <link rel="stylesheet" href="~/TestAccountProject.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .auth-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .auth-header {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .auth-footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .auth-footer a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .auth-footer a:hover {
-            text-decoration: underline;
+        .category-options {
+            display: none;
         }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Тестовый проект</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Account" asp-action="Login">PR</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -52,35 +26,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
                         </li>
                     </ul>
-                    <!-- Optional: Logout button if needed -->
-                    <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
-                        <button class="btn btn-outline-danger" type="submit">Logout</button>
-                    </form>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container flex-grow-1 d-flex justify-content-center align-items-center">
+    <div class="container">
         <main role="main" class="pb-3">
-            <div class="auth-container">
-                <h2 class="auth-header">@ViewData["Title"]</h2>
-                @RenderBody()
-                <div class="auth-footer">
-                    <p>
-                        @if (ViewData["Title"].ToString() == "LogIn")
-                        {
-                            <a href="/Account/Register">Don't have an account? Register here</a>
-                        }
-                        else
-                        {
-                            <a href="/Account/Login">Already have an account? Log in here</a>
-                        }
-                    </p>
-                </div>
-            </div>
+            @RenderBody()
         </main>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
