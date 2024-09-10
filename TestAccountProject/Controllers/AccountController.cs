@@ -8,8 +8,7 @@ namespace TestAccountProject.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-
-        public AccountController(SignInManager<IdentityUser> SManager, UserManager<IdentityUser> UManager)
+        public AccountController(SignInManager<IdentityUser> SManager, UserManager<IdentityUser> UManager, RoleManager<IdentityRole> RM)
         {
             _userManager = UManager;
             _signInManager = SManager;
@@ -25,8 +24,9 @@ namespace TestAccountProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = new IdentityUser { Email = model.Email, UserName = model.Email };
+                IdentityUser user = new IdentityUser { Email = model.Email, UserName = model.Email};
                 var result = await _userManager.CreateAsync(user, model.Password);
+                await _userManager.AddToRoleAsync(user, "user");
 
                 if (result.Succeeded)
                 {
@@ -81,7 +81,6 @@ namespace TestAccountProject.Controllers
                 {
                     ModelState.AddModelError("", "User not found.");
                 }
-
             }
             return View(model);
         }
@@ -93,5 +92,6 @@ namespace TestAccountProject.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult AccessDenied() => View();
     }
 }

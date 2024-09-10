@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container mt-5">
+    <h1 class="text-danger">Access Denied</h1>
+    <p class="lead">
+        You do not have permission to view this page.
+    </p>
+
+    <div class="alert alert-warning" role="alert">
+        <strong>Warning!</strong> You are attempting to access a restricted area.
+    </div>
+
+    <a class="btn btn-primary" href="@Url.Action("Index", "Home")">Return to Home</a>
+    <a class="btn btn-secondary" href="javascript:history.back()">Go Back</a>
+</div>
