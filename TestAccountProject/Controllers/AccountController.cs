@@ -46,9 +46,9 @@ namespace TestAccountProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login(string returnUrl)
         {
-            return View(new LoginModel{ ReturnUrl = returnUrl });
+            return View( new LoginModel { ReturnUrl = returnUrl});
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -57,14 +57,20 @@ namespace TestAccountProject.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-
                 if (user != null)
                 {
                     var isPasswordCorrect = await _userManager.CheckPasswordAsync(user, model.Password);
-                    if (isPasswordCorrect)
+                    if (isPasswordCorrect == true)
                     {
                         await _signInManager.SignInAsync(user, isPersistent: model.RememberMe);
-                        return RedirectToAction("Index", "Home");
+                        if (Url.IsLocalUrl(model.ReturnUrl) && !string.IsNullOrEmpty(model.ReturnUrl))
+                        {
+                            return Redirect(model.ReturnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
                     else
                     {

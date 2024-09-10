@@ -12,7 +12,7 @@ using TestAccountProject.Models;
 namespace TestAccountProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240908154814_init")]
+    [Migration("20240909151149_init")]
     partial class init
     {
         /// <inheritdoc />
