@@ -12,7 +12,10 @@ string connection = builder.Configuration.GetConnectionString("EFDemo");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connection));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<AppDbContext>();
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+
 
 builder.Services.AddControllersWithViews();
 
@@ -24,9 +27,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
-
-    options.User.RequireUniqueEmail = true;
-    options.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz";
 
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
