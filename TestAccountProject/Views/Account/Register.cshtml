@@ -1,34 +1,39 @@
 ﻿@model TestAccountProject.ViewModels.RegisterModel
 @{
-    ViewData["Title"] = "Register"; 
+    ViewData["Title"] = "Register";
     Layout = "_LayoutAccount.cshtml";
 }
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title text-center">@ViewData["Title"]</h2>
+<div class="container-fluid vh-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-md-6 d-none d-md-block p-0">
+            <div class="login-image text-center h-100" style="background-color: #e0f7fa; padding: 50px;">
+                <img src="~/images/iggy.png" alt="Register Illustration" style="width: 80%;">
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 p-0">
+            <div class="card shadow-sm border-0" style="border-radius: 8px;">
+                <div class="card-body p-5">
+                    <h2 class="card-title text-center mb-4">@ViewData["Title"]</h2>
                     <form method="post" asp-controller="Account" asp-action="Register">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                         <div class="form-group">
-                            <label asp-for="Email" class="form-label"></label>
-                            <input asp-for="Email" class="form-control" />
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="email@example.com" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" type="password" class="form-control" />
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="PasswordConfirm" class="form-label"></label>
-                            <input asp-for="PasswordConfirm" type="password" class="form-control" />
+                            <label asp-for="PasswordConfirm" class="form-label">Confirm Password</label>
+                            <input asp-for="PasswordConfirm" type="password" class="form-control" placeholder="confirm password" />
                             <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
                         </div>
                         <div class="form-group text-center">
-                            <input type="submit" value="Register" class="btn btn-primary" />
+                            <input type="submit" value="Register" class="btn btn-success btn-block" style="background-color: #00796b; border: none; padding: 12px; font-size: 16px;">
                         </div>
                     </form>
                 </div>
@@ -36,3 +41,39 @@
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e0f7fa;
+    }
+
+    .login-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card {
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .form-control {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .btn-success {
+        background-color: #00796b;
+        border-color: #00796b;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #004d40;
+    }
+</style>

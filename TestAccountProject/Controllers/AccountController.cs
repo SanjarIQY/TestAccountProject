@@ -39,19 +39,19 @@ namespace TestAccountProject.Controllers
 
                 if (result.Succeeded)
                 {
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                   /* code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));*/
 
                     var callBackUrl = Url.Action(
                         "ConfirmEmail",
                         "Account",
-                        new { userId = user.Id, code = code },
+                        new { userId = user.Id, token = token },
                         protocol: HttpContext.Request.Scheme);
 
                     EmailService emailService = new EmailService();
                     await emailService.SendEmailAsync(model.Email, "Confirm your account", $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callBackUrl}'>link</a>");
 
-                    return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+                    return View("ConfirmUrEmail");
                 }
                 else 
                 {
@@ -66,9 +66,9 @@ namespace TestAccountProject.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
-            if (userId == null || code == null)
+            if (userId == null || token == null)
             {
                 return View("Error");
             }
@@ -79,46 +79,17 @@ namespace TestAccountProject.Controllers
                 return View("Error");
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
                 return View();
             }
-
-            ModelState.AddModelError("", "User couldnt comfirmed");
-            return View(ModelState);
+            else
+            {
+                return View("Error");
+            }
+            
         }
-
-       /* private async Task<bool> SendEmailAsync(string to, string subject, string confirmLink)
-        {
-            MailMessage message =  new MailMessage();
-            SmtpClient smtpClient = new SmtpClient();
-            message.From = new MailAddress("theesanjar@gmail.com");
-            message.To.Add(to);
-            message.Subject = subject;
-            message.IsBodyHtml = true;
-            message.Body = confirmLink;
-
-            smtpClient.Port = 587;
-            smtpClient.Host = "smtp.gmail.com";
-
-            smtpClient.EnableSsl = true;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("theesanjar@gmail.com", "Sanjar1203");
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-            try
-            {
-                _logger.LogInformation("Trying to send email");
-                await smtpClient.SendMailAsync(message);
-                return true;
-            }
-            catch (Exception)
-            {
-                _logger.LogInformation("Caught an exception");
-                return false;
-            }
-        }*/
 
         [HttpGet]
         public IActionResult Login(string returnUrl)
@@ -134,27 +105,21 @@ namespace TestAccountProject.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
-                    var isPasswordCorrect = await _userManager.CheckPasswordAsync(user, model.Password);
-                    if (isPasswordCorrect == true)
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: model.RememberMe);
-                        if (Url.IsLocalUrl(model.ReturnUrl) && !string.IsNullOrEmpty(model.ReturnUrl))
-                        {
-                            return Redirect(model.ReturnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
+                        ModelState.AddModelError(string.Empty, "Email is not confirmed");
+                        return View(model);
+                    }
+
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Invalid password.");
+                        ModelState.AddModelError("", "Password or email is incorrect");
                     }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "User not found.");
                 }
             }
             return View(model);

@@ -6,7 +6,7 @@ using TestAccountProject.ViewModels;
 
 namespace TestAccountProject.ViewModels
 {
-    [Authorize(Roles ="admin")]
+    [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         RoleManager<IdentityRole> _roleManager;
